@@ -3,7 +3,7 @@
 
 #include <stdarg.h>
 #include <unistd.h>
-#include <stlib.h>
+#include <stdlib.h>
 
 int _ninoprint(char c);
 int _printf(const char *format, ...);
