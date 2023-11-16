@@ -1,64 +1,46 @@
 #include "main.h"
 /**
- * _printf - print out count
- *
- * @format: specifies the format
- * Return: returns the numbers of printed characters
+ * _printf - is a function that selects the correct function to print.
+ * @format: identifier to look for.
+ * Return: the length of the string.
  */
-int _printf(const char *format, ...)
+int _printf(const char * const format, ...)
 {
-	unsigned int i = 0;
+	convert p[] = {
+		{"%s", print_s}, {"%c", print_c},
+		{"%%", print_37},
+		{"%i", print_i}, {"%d", print_d}, {"%r", print_revs},
+		{"%R", print_rot13}, {"%b", print_bin},
+		{"%u", print_unsigned},
+		{"%o", print_oct}, {"%x", print_hex}, {"%X", print_HEX},
+		{"%S", print_exc_string}, {"%p", print_pointer}
+	};
 
-		va_list all;
+	va_list args;
+	int y = 0, m, length = 0;
 
-	va_start(all, format);
-	while (*format)
+	va_start(args, format);
+	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
+		return (-1);
+
+Here:
+	while (format[y] != '\0')
 	{
-		if (*format == '%')
+		m = 13;
+		while (m >= 0)
 		{
-			format++;
-
-			if (*format == 'c')
+			if (p[m].ph[0] == format[y] && p[m].ph[1] == format[y + 1])
 			{
-				char character = va_arg(all, int);
-
-				_ninoprint(character);
-				i++;
+				length += p[m].function(args);
+				y = y + 2;
+				goto Here;
 			}
-			else if (*format == 's')
-			{	char *str = va_arg(all, char *);
-
-				while (*str != '\0')
-				{
-					_ninoprint(*str);
-					str++;
-					i++;
-				}
-			}
-			else if (*format == '%')
-			{	_ninoprint('%');
-				i++;
-			}
-			else if (*format == 'd')
-			{
-				int number = va_arg(all, int);
-				_ninoprint(number);
-				i += _ninoprint(number);
-			}
-			else if (*format == 'i')
-			{
-				int numeral = va_arg(all, int);
-				_ninoprint(numeral);
-				i++;
-			}
+			m--;
 		}
-		else
-		{
-			_ninoprint(*format);
-			i++;
-		}
-		format++;
+		_putchar(format[y]);
+		length++;
+		y++;
 	}
-	va_end(all);
-	return (i);
+	va_end(args);
+	return (length);
 }
