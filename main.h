@@ -1,6 +1,11 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <stdarg.h>
+#include <unistd.h>
+#include <stlib.h>
+
+int _ninoprint(char c);
 int _printf(const char *format, ...);
 
 #endif
